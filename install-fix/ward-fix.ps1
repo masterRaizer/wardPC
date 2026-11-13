@@ -10,8 +10,7 @@
 $ErrorActionPreference = 'Continue'
 $dir   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $me    = $MyInvocation.MyCommand.Path
-$exe   = Join-Path $dir 'Ward-1.0.0.exe'
-$msi   = Join-Path $dir 'Ward-1.0.0.msi'
+$msi   = Join-Path $dir 'Ward-1.0.1.msi'
 $log   = Join-Path $dir 'ward-install.log'
 $diag  = Join-Path $dir $(if ($AfterReboot) { 'ward-diag-after-reboot.txt' } else { 'ward-diag.txt' })
 $saved = Join-Path $dir 'gaming-services-starttypes.json'
@@ -114,13 +113,9 @@ function Restore-GamingServices {
     Write-Host '  Gaming Services will start again at next boot (and may retry its GameInput install).'
 }
 function Ensure-Msi {
-    Write-Host "`n== Extracting MSI from Ward-1.0.0.exe"
-    $expected = 'FC20685D8A71E6A69D71C528C8E04BDCE4FF4A9CBCA6249D98E063587F75FFBF'
-    if (-not (Test-Path $msi) -or (Get-FileHash $msi -Algorithm SHA256).Hash -ne $expected) {
-        $bytes = [IO.File]::ReadAllBytes($exe); $len = 86537049
-        $buf = New-Object byte[] $len; [Array]::Copy($bytes, 579252, $buf, 0, $len)
-        [IO.File]::WriteAllBytes($msi, $buf); $bytes = $null; $buf = $null; [GC]::Collect()
-    }
+    Write-Host "`n== Checking Ward-1.0.1.msi"
+    $expected = '8361D32FFE449E3E7053631803E1CEE38D47037694181D7E80E14BD88E35F3F3'
+    if (-not (Test-Path $msi)) { Write-Host 'Ward-1.0.1.msi not found next to the script.'; return $false }
     $ok = (Get-FileHash $msi -Algorithm SHA256).Hash -eq $expected
     Write-Host "MSI sha256 ok: $ok"
     Unblock-File $msi -ErrorAction SilentlyContinue
