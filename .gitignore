@@ -1,0 +1,5 @@
+*.log
+ward-diag*.txt
+gaming-services-starttypes.json
+*.msi
+*.exe
