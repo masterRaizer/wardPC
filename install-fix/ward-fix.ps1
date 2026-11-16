@@ -10,7 +10,7 @@
 $ErrorActionPreference = 'Continue'
 $dir   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $me    = $MyInvocation.MyCommand.Path
-$msi   = Join-Path $dir 'Ward-1.0.1.msi'
+$msi   = Join-Path $dir 'Ward-1.0.2.msi'
 $log   = Join-Path $dir 'ward-install.log'
 $diag  = Join-Path $dir $(if ($AfterReboot) { 'ward-diag-after-reboot.txt' } else { 'ward-diag.txt' })
 $saved = Join-Path $dir 'gaming-services-starttypes.json'
@@ -113,9 +113,9 @@ function Restore-GamingServices {
     Write-Host '  Gaming Services will start again at next boot (and may retry its GameInput install).'
 }
 function Ensure-Msi {
-    Write-Host "`n== Checking Ward-1.0.1.msi"
-    $expected = '8361D32FFE449E3E7053631803E1CEE38D47037694181D7E80E14BD88E35F3F3'
-    if (-not (Test-Path $msi)) { Write-Host 'Ward-1.0.1.msi not found next to the script.'; return $false }
+    Write-Host "`n== Checking Ward-1.0.2.msi"
+    $expected = 'CE1D86E9C34C541FF74332E490A0D0FFF0BA1838E909675E9F2D0AC60CE3543C'
+    if (-not (Test-Path $msi)) { Write-Host 'Ward-1.0.2.msi not found next to the script.'; return $false }
     $ok = (Get-FileHash $msi -Algorithm SHA256).Hash -eq $expected
     Write-Host "MSI sha256 ok: $ok"
     Unblock-File $msi -ErrorAction SilentlyContinue
